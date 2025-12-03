@@ -1,3 +1,14 @@
+/*
+Es un arbol o no
+Este código verifica si la estructura dada cumple con una condición par ser un arbol, en este caso
+nos dira si tiene ciclos o no, por lo que no importa si el arbol tiene peso o no.
+El código acepta el peso pero no sirve para nada.
+La complejidad total del algoritmo es O(n + m) porque la operación dominante es el DFS utilizado para
+detectar ciclos en el grafo. El resto de las operaciones tienen costos menores ( de O(n) o O(1)),
+por lo que no afectan la complejidad final. Como resultado nos da que el tiempo total del algoritmo está
+determindado por el recorrido profundo del grafo, lo que nos da una complejidad global de O(n + m).
+*/
+
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -14,11 +25,7 @@ bool tieneCiclo(int nodo, int padre, vector<vector<int>>& grafo, vector<bool>& v
     return false;
 }
 
-bool esConexo(vector<bool>& visitado) {
-    for (bool v : visitado) // v representa cada valor de visitado, es decir agarra los valores de true o false de visitado de 0 a visitadi.size()
-        if (!v) return false;
-    return true;
-}
+
 
 int main() {
     int n, a;
@@ -28,25 +35,57 @@ int main() {
     cin >> a;
     vector<bool> visitado(n, false);
     vector<vector<int>> grafo(n); //lista de adyacencia 
-    if (a!=n-1) {
-        cout << "El numero de aristas es diferente a n-1 por lo tanto no es un arbol\n"; 
-        return 0;
-    }
-    cout << "Ingresa cada arista como: nodo_inicial nodo_final :\n";
+   
+    cout << "Ingresa cada arista como: nodo_inicial nodo_final peso:\n";
     for (int i = 0; i < a; i++) {
-        int u, v;
-        cin >> u >> v;
+        int u, v,w;
+        cin >> u >> v>>w; //no se guarda el peso porque no tiene relevancia para el problema
         u--; v--; 
         grafo[u].push_back(v);
         grafo[v].push_back(u);
     }
     if (tieneCiclo(0, -1, grafo, visitado)) {
         cout << " El grafo no es un arbol ya que contiene un ciclo.\n";
-    } else if (!esConexo(visitado)) {
-        cout << " El grafo no es un arbol ya que es disconexo.\n";
+    
     } else {
-        cout << " El grafo es un arbol.\n";
+        cout << " El grafo no tiene ciclos por lo tanto cumple con una de las condiciones para ser un arbol\n";
     }
 
     return 0;
 }
+
+/*
+Casos prueba:
+
+4 3
+1 2 5
+1 3 7
+1 4 2
+Output: El grafo no tiene ciclos por lo tanto cumple con una de las condiciones para ser un arbol
+
+6 4
+1 2 1
+2 3 1
+3 1 1     
+5 6 2    
+Output: El grafo no es un arbol ya que contiene un ciclo.
+
+7 6
+1 2 3
+1 3 1
+2 4 8
+2 5 2
+3 6 4
+3 7 6
+Output: El grafo no tiene ciclos por lo tanto cumple con una de las condiciones para ser un arbol
+
+6 6
+1 2 5
+2 3 7
+3 1 3
+3 4 2
+4 5 2
+5 3 1
+Output: El grafo no es un arbol ya que contiene un ciclo.
+
+*/
